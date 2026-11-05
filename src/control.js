@@ -31,22 +31,35 @@
     }
   }
 
-  await devices();
   fill();
+  // device list loads in the background so it can never block Save
+  Promise.race([devices(), new Promise((r) => setTimeout(r, 4000))]).then(fill).catch(() => {});
 
   document.querySelectorAll('[data-preset]').forEach((b) => (b.onclick = () => {
     const p = PRESETS[b.dataset.preset];
     for (const sec in p) for (const k in p[sec]) document.querySelector(`[data-key="${sec}.${k}"]`).value = p[sec][k];
   }));
 
-  document.getElementById('save').onclick = async () => {
+  async function save(quiet) {
     const patch = {};
     for (const el of fields) {
-      let v = el.type === 'checkbox' ? el.checked : el.type === 'number' || el.type === 'range' ? Number(el.value) : el.value;
+      const v = el.type === 'checkbox' ? el.checked : el.type === 'number' || el.type === 'range' ? Number(el.value) : el.value;
       set(patch, el.dataset.key, v);
     }
-    cfg = await api.setConfig(patch);
     const s = document.getElementById('saved');
-    s.textContent = 'Saved ✓'; setTimeout(() => (s.textContent = ''), 2000);
-  };
+    try {
+      cfg = await api.setConfig(patch);
+      const words = (cfg.script.match(/\S+/g) || []).length;
+      s.style.color = '#46d37a';
+      s.textContent = quiet ? '' : `Saved ✓  (${words} words in script)`;
+      if (!quiet) setTimeout(() => (s.textContent = ''), 3000);
+    } catch (e) {
+      s.style.color = '#ff6b6b';
+      s.textContent = 'Save failed: ' + e.message;
+    }
+  }
+  document.getElementById('save').onclick = () => save(false);
+  // autosave the script shortly after you stop typing/pasting
+  let t;
+  document.querySelector('[data-key="script"]').addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => save(true), 500); });
 })();
