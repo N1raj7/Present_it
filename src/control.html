@@ -1,0 +1,42 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="control.css"></head>
+<body>
+<h1>Present_it</h1>
+<section>
+  <h2>Script</h2>
+  <textarea data-key="script" rows="12" spellcheck="false"></textarea>
+</section>
+<div class="cols">
+<section>
+  <h2>Speech-to-text <small>(OpenAI-compatible)</small></h2>
+  <div class="presets"><button data-preset="stt:groq">Groq (free tier)</button><button data-preset="stt:local">Local server</button></div>
+  <label>Base URL<input data-key="stt.baseUrl"></label>
+  <label>API key<input data-key="stt.apiKey" type="password" placeholder="gsk_…"></label>
+  <label>Model<input data-key="stt.model"></label>
+  <label>Language (blank = auto)<input data-key="stt.language"></label>
+</section>
+<section>
+  <h2>AI model for answers <small>(OpenAI-compatible)</small></h2>
+  <div class="presets"><button data-preset="llm:groq">Groq</button><button data-preset="llm:gemini">Gemini</button><button data-preset="llm:ollama">Ollama (local)</button></div>
+  <label>Base URL<input data-key="llm.baseUrl"></label>
+  <label>API key<input data-key="llm.apiKey" type="password"></label>
+  <label>Model<input data-key="llm.model"></label>
+</section>
+</div>
+<div class="cols">
+<section>
+  <h2>Audio</h2>
+  <label>My microphone<select data-key="audio.micDeviceId" id="micSel"></select></label>
+  <label>Where questions come from<select data-key="audio.otherSource" id="otherSel"></select></label>
+</section>
+<section>
+  <h2>Behaviour</h2>
+  <label class="chk"><input type="checkbox" data-key="ui.hideFromCapture"> Hide from screen share / recording</label>
+  <label class="chk"><input type="checkbox" data-key="ui.autoAsk"> Auto-ask AI when a question is heard</label>
+  <label>Background opacity<input type="range" min="0.4" max="1" step="0.02" data-key="ui.opacity"></label>
+  <label>Font size<input type="number" min="12" max="60" data-key="ui.fontSize"></label>
+</section>
+</div>
+<div class="actions"><button id="save">Save &amp; apply</button><span id="saved"></span></div>
+<script src="control.js"></script>
+</body></html>

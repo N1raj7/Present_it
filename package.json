@@ -1,0 +1,22 @@
+{
+  "name": "present-it",
+  "version": "0.1.0",
+  "description": "Ghost teleprompter: a floating notch that follows your voice, hidden from screen share, with an AI answer panel.",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/run.js",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "dev.present-it",
+    "productName": "Present_it",
+    "files": ["main.js", "preload.js", "src/**"],
+    "mac": { "extendInfo": { "NSMicrophoneUsageDescription": "Present_it listens to your voice to follow your script." } }
+  }
+}

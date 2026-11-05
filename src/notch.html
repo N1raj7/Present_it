@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="notch" class="panel">
+  <div id="clickthrough">click-through ON (Ctrl/Cmd+Shift+C)</div>
+  <div class="bar">
+    <span id="status">idle</span>
+    <div class="btns">
+      <button id="btnFollow" title="Follow my voice (Ctrl/Cmd+Shift+M)">🎙 Follow</button>
+      <button id="btnListen" title="Listen for questions (Ctrl/Cmd+Shift+L)">👂 Listen</button>
+      <button id="btnAsk" title="Ask AI about what was just heard">❓</button>
+      <button id="fontDown" title="Smaller text">A−</button>
+      <button id="fontUp" title="Bigger text">A+</button>
+      <button id="btnSettings" title="Settings">⚙</button>
+      <button id="btnQuit" title="Quit">✕</button>
+    </div>
+  </div>
+  <div id="scroller"><div id="script"></div></div>
+  <div id="heard"></div>
+  <div id="grip"></div>
+</div>
+<script src="matcher.js"></script>
+<script src="detect.js"></script>
+<script src="audio.js"></script>
+<script src="ui.js"></script>
+<script src="notch.js"></script>
+</body></html>

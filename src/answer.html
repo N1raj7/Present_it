@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="answerPanel" class="panel">
+  <div class="bar">
+    <span class="title">AI answer</span>
+    <div class="btns">
+      <button id="btnClear" title="Clear conversation memory">Clear</button>
+      <button id="btnHide" title="Hide (Ctrl/Cmd+Shift+A)">✕</button>
+    </div>
+  </div>
+  <div id="qBox"></div>
+  <div id="aBox">Questions heard by "Listen" show up here. You can also type one below.</div>
+  <div id="askRow">
+    <input id="askInput" placeholder="Ask anything…" autocomplete="off">
+    <button id="askBtn">Ask</button>
+  </div>
+  <div id="grip"></div>
+</div>
+<script src="ui.js"></script>
+<script src="answer.js"></script>
+</body></html>
