@@ -32,6 +32,44 @@ Run tests for the matching logic: `npm test`. Build installers: `npm run dist`.
 
 You can also click any word to jump there, or use the arrow keys while the notch has focus.
 
+## Status (v0.1.0)
+
+| Area | State |
+|---|---|
+| Floating notch, drag to move | Works |
+| Voice-following script (Groq Whisper) | Works (confirmed on Windows), but has noticeable lag |
+| Hidden from screen share | Implemented (`setContentProtection`); verify on your own call app before relying on it |
+| Settings window, autosave script | Works |
+| Resizing the notch / answer panel | **Not working yet** (bottom-right grip needs fixing) |
+| Question detection + AI answer panel | **Failing** (needs debugging; see below) |
+| System-audio capture (Listen) | Untested end to end |
+
+## Known issues
+1. **Highlight lags your voice.** Audio is sent in chunks (up to ~4 s, or when you pause ~0.5 s) and the pointer only moves after a chunk is transcribed and returned.
+2. **No resize.** The custom resize grip does not resize the frameless transparent window on Windows. Needs a fix (see roadmap).
+3. **Question to AI answer flow fails.** Listen mode / AI answers do not work yet. Likely suspects: system audio loopback not delivering an audio track, the LLM model id or key in Settings, or the question detector not triggering. Needs logging to find out which.
+4. Whisper sometimes hallucinates phrases on silence; a small filter drops the common ones.
+5. `npm audit` reports warnings from build-time dependencies; they do not affect the running app.
+
+## Roadmap
+- [ ] **Faster following**: shorter chunks (about 1.5 s) and update the pointer on *partial* results mid-sentence instead of waiting for a full chunk to finish; overlap chunks so words at the boundary are not lost.
+- [ ] **Lower-latency STT**: streaming recognition (Vosk or whisper.cpp locally) instead of one API call per chunk.
+- [ ] **Fix resize**: reliable resize for the notch and answer panel (edge handles, or drag-resize through the main process with a visible grip).
+- [ ] **Fix question to answer pipeline**: add a debug log/status for each stage (audio captured, transcribed, detected as question, LLM called, answer streamed) and fix whichever stage is failing.
+- [ ] Manual "type a question" path verified end to end independent of audio.
+- [ ] Optional: reasoning-effort control for gpt-oss models to cut answer latency.
+- [ ] Installer build (`npm run dist`) and a no-console launcher.
+- [ ] Per-section talking points, slide sync mode, ignore own voice in Listen mode.
+
+## Running without typing commands (Windows)
+Double-click `start.bat`, or `start-hidden.vbs` for no console window (make a desktop shortcut to it).
+
+## Suggested free setup (Groq)
+Use one Groq key for both fields in Settings.
+- Speech-to-text model: `whisper-large-v3-turbo` (faster) or `whisper-large-v3` (slightly more accurate)
+- AI answers model: `openai/gpt-oss-20b` (fast) or `openai/gpt-oss-120b` (smarter)
+- Base URL for both: `https://api.groq.com/openai/v1`
+
 ## Platform notes
 - **Windows 10 (2004+) / 11**: capture exclusion and system-audio loopback work out of the box.
 - **macOS**: grant Microphone and Screen Recording permission to your terminal/Electron. System-audio loopback may need a virtual device such as [BlackHole](https://github.com/ExistentialAudio/BlackHole); choose it under "Where questions come from". **Some newer macOS versions let ScreenCaptureKit-based tools (including recent Zoom/Meet/OBS builds) capture "protected" windows anyway.** Always do a test recording before presenting for real.
